@@ -5,31 +5,42 @@ const display = document.querySelector('.display');
 const numbers = document.querySelectorAll('.button');
 // Seleciona um único elemento e assegura que é um HTMLElement com checagem de nulidade
 const buttonEqual = document.querySelector('#equal');
-// Corrige a classe `funtionB` para o nome correto
+const backspace = document.querySelector("#clear");
 const buttonFunctions = document.querySelectorAll('.functionB');
 // Verifica se display foi encontrado antes de usar
-if (display) {
-    // Adiciona eventos de clique aos botões de números
-    numbers.forEach(element => {
-        element.addEventListener('click', () => {
-            var _a, _b;
-            if (display) { // Verifica se display ainda é um HTMLElement
-                display.textContent = (_b = (_a = display.textContent) !== null && _a !== void 0 ? _a : '' + element.textContent) !== null && _b !== void 0 ? _b : ''; // Adiciona uma verificação de null
-            }
-        });
-    });
+if (!display) {
+    throw new Error("Display not found");
 }
-class calc {
+class Calc {
     constructor(terms) {
         this.terms = terms;
     }
-    addTerm(element) {
-        var _a;
-        if (element.textContent != "*" &&
-            element.textContent != "-" &&
-            element.textContent != "+" &&
-            element.textContent != "/") {
-            this.terms.push((_a = element.textContent) !== null && _a !== void 0 ? _a : "");
+    addTerm(term) {
+        if (term !== "*" &&
+            term !== "-" &&
+            term !== "+" &&
+            term !== "/") {
+            this.terms.push(term !== null && term !== void 0 ? term : "");
+            console.log(this.terms);
         }
     }
+    lessTerm() {
+        this.terms.pop();
+        console.log(this.terms);
+    }
 }
+// Instancia a classe Calc
+const calc = new Calc([]);
+// Adiciona os eventos de clique para os botões de números
+numbers.forEach(element => {
+    element.addEventListener('click', () => {
+        const text = element.textContent;
+        if (text) {
+            calc.addTerm(text);
+            display.textContent = text;
+        }
+    });
+});
+backspace === null || backspace === void 0 ? void 0 : backspace.addEventListener('click', () => {
+    calc.lessTerm();
+});

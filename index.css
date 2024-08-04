@@ -39,6 +39,16 @@ body {
     transition: background-color 0.3s;
 }
 
+#clear {
+    padding: 20px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    background-color: #eee;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
 .button:hover {
     background-color: #ddd;
 }

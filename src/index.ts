@@ -1,4 +1,5 @@
 "use strict";
+
 // Seleciona o display e assegura que é um HTMLElement
 const display = document.querySelector('.display') as HTMLElement | null;
 
@@ -8,33 +9,53 @@ const numbers = document.querySelectorAll('.button') as NodeListOf<HTMLElement>;
 // Seleciona um único elemento e assegura que é um HTMLElement com checagem de nulidade
 const buttonEqual = document.querySelector('#equal') as HTMLElement | null;
 
-// Corrige a classe `funtionB` para o nome correto
+const backspace = document.querySelector("#clear") as HTMLElement | null;
+
 const buttonFunctions = document.querySelectorAll('.functionB') as NodeListOf<HTMLElement>;
 
 // Verifica se display foi encontrado antes de usar
-if (display) {
-    // Adiciona eventos de clique aos botões de números
-    numbers.forEach(element => {
-        element.addEventListener('click', () => {
-            if (display) {  // Verifica se display ainda é um HTMLElement
-                display.textContent = display.textContent ?? '' + element.textContent ?? ''; // Adiciona uma verificação de null
-            }
-        });
-    });
+if (!display) {
+    throw new Error("Display not found");
 }
 
-class calc {
-    terms
+class Calc {
+    terms: string[];
+
     constructor(terms: string[]) {
-        this.terms = terms
+        this.terms = terms;
     }
-    addTerm(element: HTMLElement) {
-        if (element.textContent != "*" &&
-            element.textContent != "-" && 
-            element.textContent != "+" &&
-            element.textContent != "/") {
-            this.terms.push(element.textContent ?? "")
+
+    addTerm(term: string) {
+        if (term !== "*" &&
+            term !== "-" && 
+            term !== "+" &&
+            term !== "/") {
+            this.terms.push(term ?? "");
+            console.log(this.terms);     
         }  
     }
-        
+
+    lessTerm() {
+        this.terms.pop() as string
+        console.log(this.terms)
+    }
 }
+
+// Instancia a classe Calc
+const calc = new Calc([]);
+
+// Adiciona os eventos de clique para os botões de números
+numbers.forEach(element => {
+    element.addEventListener('click', () => {
+        const text = element.textContent;
+        if (text) {
+            calc.addTerm(text)
+            display.textContent = calc.terms; //array principal ser um ter o temos como arrays,
+            // assim fazendo referencia como calc.terms[0] ou calc.terms[1] etc..
+        }
+    });
+});
+
+backspace?.addEventListener('click', () => {
+    calc.lessTerm()
+})

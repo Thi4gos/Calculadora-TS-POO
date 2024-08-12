@@ -1,56 +1,45 @@
 "use strict";
-
-// Seleciona o display e assegura que é um HTMLElement
-const display = document.querySelector('.display') as HTMLElement | null;
-
-// Seleciona múltiplos elementos e assegura que são HTMLElements
-const numbers = document.querySelectorAll('.button') as NodeListOf<HTMLElement>;
-
-// Seleciona um único elemento e assegura que é um HTMLElement com checagem de nulidade
-const buttonEqual = document.querySelector('#equal') as HTMLElement | null;
-
-const backspace = document.querySelector("#clear") as HTMLElement | null;
-
-const buttonFunctions = document.querySelectorAll('.functionB') as NodeListOf<HTMLElement>;
-
+import { display, numbers, buttonEqual, backspace, buttonFunctions } from "./access"
 // Verifica se display foi encontrado antes de usar
 if (!display) {
     throw new Error("Display not found");
 }
-
 class Calc {
-    terms: string[];
-
-    constructor(terms: string[]) {
+    expression: string[][] // A expreção que está sendo construída no momento, um array de arrays
+    terms: string[] // Os termos da expressão
+    // Construído com base em lógica matemática, manipulando termos
+    // Termos passados como strings no array principal
+    constructor(terms: string[], expression: string[][]) {
         this.terms = terms;
+        this.expression = expression;
     }
-
-    addTerm(term: string) {
-        if (term !== "*" &&
-            term !== "-" && 
-            term !== "+" &&
-            term !== "/") {
-            this.terms.push(term ?? "");
-            console.log(this.terms);     
-        }  
+    contructTerm(element: string) {
+        const Tm: string[] = []
+        Tm.push(element)
+        //Fazer um termo, preparando para adicioná-lo
+    }
+    addTerm(Tm: string[]) {
+         this.expression.push(Tm)
     }
 
     lessTerm() {
-        this.terms.pop() as string
-        console.log(this.terms)
+        this.expression.pop()
     }
+    
 }
-
 // Instancia a classe Calc
-const calc = new Calc([]);
+const calc = new Calc([], []);
 
 // Adiciona os eventos de clique para os botões de números
 numbers.forEach(element => {
     element.addEventListener('click', () => {
-        const text = element.textContent;
-        if (text) {
-            calc.addTerm(text)
-            display.textContent = calc.terms; //array principal ser um ter o temos como arrays,
+        if (calc.terms.length >= 1) {
+            const formText = element.textContent as string
+            calc.contructTerm(formText)
+            const final = calc.expression[0].flat().join(' '); // Flatten the array and join elements
+            console.log(final)
+             //FAZER APARECER O ARRAY NO DISPLAY
+           // display.textContent = calc.terms; //array principal ser um array de arrays,
             // assim fazendo referencia como calc.terms[0] ou calc.terms[1] etc..
         }
     });
